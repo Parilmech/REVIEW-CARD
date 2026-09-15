@@ -146,7 +146,6 @@
   <div class="scratch-wrap">
     <div class="prize">
       <div class="amt-label">YOU WON</div>
-      <!-- AMOUNT: change value below or pass via ?amount=150 in URL -->
       <div class="amt" id="amount">₹23</div>
     </div>
     <canvas id="scratch" width="380" height="130"></canvas>
@@ -154,7 +153,7 @@
   <div class="hint" id="hint">Rub with your finger to scratch</div>
 
   <div class="field">
-    <label>CUSTOMER NAME</label>
+    <label>MAYUR NAKRANI</label>
     <input type="text" id="custName" placeholder="Enter your name">
   </div>
   <div class="field">
@@ -230,15 +229,4 @@
   canvas.addEventListener('touchend', stop);
 
   // ---- WhatsApp send button ----
-  // Change this number to your business WhatsApp number (with country code, no + or spaces)
-  const WHATSAPP_NUMBER = '91XXXXXXXXXX';
-  document.getElementById('waBtn').addEventListener('click', function(e) {
-    e.preventDefault();
-    const name = document.getElementById('custName').value || 'Customer';
-    const upi = document.getElementById('upiId').value || 'not entered';
-    const msg = `Hi, I scratched and won ₹${amount} cashback!\nName: ${name}\nUPI ID: ${upi}`;
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
-  });
-</script>
-</body>
-</html>
+  // Change this number to your business WhatsApp number (with country code, no + or
