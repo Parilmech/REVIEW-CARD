@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cashback Reward</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: radial-gradient(ellipse at top, #1a1a1a 0%, #000000 70%);
+    color: #f4e4bc;
+    display: flex;
+    justify-content: center;
+    padding: 24px 12px 60px;
+  }
+  .card {
+    width: 100%;
+    max-width: 420px;
+    border: 1px solid #7a5c1e;
+    border-radius: 18px;
+    padding: 28px 22px 32px;
+    background: linear-gradient(180deg, #0d0d0d, #000000);
+    box-shadow: 0 0 40px rgba(212,175,55,0.15);
+    text-align: center;
+    position: relative;
+  }
+  .gift { font-size: 42px; margin-bottom: 6px; }
+  h1 {
+    font-family: Georgia, serif;
+    font-style: italic;
+    font-size: 40px;
+    margin: 0 0 6px;
+    background: linear-gradient(180deg,#fff6d5,#d4af37,#a8791a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .sub {
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: #e9d9a8;
+    margin-bottom: 4px;
+  }
+  h2 {
+    font-size: 30px;
+    letter-spacing: 2px;
+    margin: 4px 0 18px;
+    background: linear-gradient(180deg,#fff6d5,#d4af37,#a8791a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 800;
+  }
+  .divider { color: #a8791a; font-size: 13px; margin-bottom: 18px; }
+
+  .scratch-label {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    color: #d4af37;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .scratch-wrap {
+    position: relative;
+    width: 100%;
+    height: 130px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #a8791a;
+    margin-bottom: 6px;
+  }
+  .prize {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg,#1a1a1a,#000);
+  }
+  .prize .amt-label { font-size: 12px; color: #d4af37; letter-spacing: 1px; }
+  .prize .amt { font-size: 38px; font-weight: 800; color: #ffe9a8; margin-top: 4px; }
+  canvas { position: absolute; inset: 0; touch-action: none; cursor: pointer; }
+  .hint { font-size: 12px; color: #9c8b5e; margin-bottom: 22px; }
+
+  .field { text-align: left; margin-bottom: 16px; }
+  .field label {
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #e9d9a8;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .field input {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed #7a5c1e;
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: #f4e4bc;
+    font-size: 14px;
+  }
+  .field input::placeholder { color: #6b5c3a; }
+
+  .thanks {
+    border: 1px solid #a8791a;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 13px;
+    color: #f4e4bc;
+    margin: 18px 0 14px;
+    line-height: 1.5;
+  }
+  .thanks b { color: #ffe9a8; }
+  .footer-note {
+    font-family: Georgia, serif;
+    font-style: italic;
+    font-size: 15px;
+    color: #d4af37;
+  }
+  .wa-btn {
+    display: inline-block;
+    margin-top: 18px;
+    background: linear-gradient(180deg,#ffe9a8,#d4af37);
+    color: #1a1200;
+    font-weight: 700;
+    padding: 12px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 14px;
+    border: none;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="gift">🎁</div>
+  <h1>Congratulations!</h1>
+  <div class="sub">★ YOU'VE WON A ★</div>
+  <h2>CASHBACK REWARD</h2>
+  <div class="divider">— ♥ —</div>
+
+  <div class="scratch-label">SCRATCH TO REVEAL YOUR REWARD</div>
+  <div class="scratch-wrap">
+    <div class="prize">
+      <div class="amt-label">YOU WON</div>
+      <!-- AMOUNT: change value below or pass via ?amount=150 in URL -->
+      <div class="amt" id="amount">₹100</div>
+    </div>
+    <canvas id="scratch" width="380" height="130"></canvas>
+  </div>
+  <div class="hint" id="hint">Rub with your finger to scratch</div>
+
+  <div class="field">
+    <label>CUSTOMER NAME</label>
+    <input type="text" id="custName" placeholder="Enter your name">
+  </div>
+  <div class="field">
+    <label>YOUR UPI ID (to receive cashback)</label>
+    <input type="text" id="upiId" placeholder="yourname@upi">
+  </div>
+
+  <div class="thanks">
+    Thank you for taking the time to share your <b>valuable review</b>.
+  </div>
+  <div class="footer-note">Your feedback means a lot to us! ♥</div>
+
+  <br>
+  <a class="wa-btn" id="waBtn" href="#" target="_blank">Send on WhatsApp</a>
+</div>
+
+<script>
+  // Read amount from URL ?amount=150, else default stays ₹100
+  const params = new URLSearchParams(window.location.search);
+  const amount = params.get('amount') || '100';
+  document.getElementById('amount').textContent = '₹' + amount;
+
+  // ---- Scratch card logic ----
+  const canvas = document.getElementById('scratch');
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#c9b98a';
+  ctx.fillRect(0, 0, 380, 130);
+  ctx.fillStyle = '#3a2f10';
+  ctx.font = 'bold 16px Segoe UI';
+  ctx.textAlign = 'center';
+  ctx.fillText('? ? ? ? ?', 190, 60);
+  ctx.font = '12px Segoe UI';
+  ctx.fillText('SCRATCH HERE', 190, 85);
+
+  let drawing = false;
+  let revealed = false;
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return {
+      x: (clientX - rect.left) * (380 / rect.width),
+      y: (clientY - rect.top) * (130 / rect.height)
+    };
+  }
+  function scratchAt(x, y) {
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    ctx.arc(x, y, 20, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  function checkReveal() {
+    if (revealed) return;
+    const data = ctx.getImageData(0, 0, 380, 130).data;
+    let cleared = 0, total = 0;
+    for (let i = 3; i < data.length; i += 40) { total++; if (data[i] === 0) cleared++; }
+    if (cleared / total > 0.5) {
+      revealed = true;
+      canvas.style.transition = 'opacity 0.4s';
+      canvas.style.opacity = '0';
+      document.getElementById('hint').textContent = 'Reward revealed! Fill your details below and send on WhatsApp.';
+    }
+  }
+  function start(e) { drawing = true; const p = getPos(e); scratchAt(p.x, p.y); }
+  function move(e) { if (!drawing) return; e.preventDefault(); const p = getPos(e); scratchAt(p.x, p.y); checkReveal(); }
+  function stop() { drawing = false; }
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  canvas.addEventListener('mouseup', stop);
+  canvas.addEventListener('touchstart', start);
+  canvas.addEventListener('touchmove', move);
+  canvas.addEventListener('touchend', stop);
+
+  // ---- WhatsApp send button ----
+  // Change this number to your business WhatsApp number (with country code, no + or spaces)
+  const WHATSAPP_NUMBER = '91XXXXXXXXXX';
+  document.getElementById('waBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('custName').value || 'Customer';
+    const upi = document.getElementById('upiId').value || 'not entered';
+    const msg = `Hi, I scratched and won ₹${amount} cashback!\nName: ${name}\nUPI ID: ${upi}`;
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+  });
+</script>
+</body>
+</html>
