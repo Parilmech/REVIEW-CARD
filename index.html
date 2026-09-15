@@ -147,7 +147,7 @@
     <div class="prize">
       <div class="amt-label">YOU WON</div>
       <!-- AMOUNT: change value below or pass via ?amount=150 in URL -->
-      <div class="amt" id="amount">₹100</div>
+      <div class="amt" id="amount">₹23</div>
     </div>
     <canvas id="scratch" width="380" height="130"></canvas>
   </div>
@@ -172,9 +172,9 @@
 </div>
 
 <script>
-  // Read amount from URL ?amount=150, else default stays ₹100
+  // Read amount from URL ?amount=23, else default stays ₹23
   const params = new URLSearchParams(window.location.search);
-  const amount = params.get('amount') || '100';
+  const amount = params.get('amount') || '23';
   document.getElementById('amount').textContent = '₹' + amount;
 
   // ---- Scratch card logic ----
