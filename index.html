@@ -172,7 +172,7 @@
 </div>
 
 <script>
-  // Read amount from URL ?amount=23, else default stays ₹23
+  // Read amount from URL ?amount=150, else default stays ₹23
   const params = new URLSearchParams(window.location.search);
   const amount = params.get('amount') || '23';
   document.getElementById('amount').textContent = '₹' + amount;
